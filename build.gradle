@@ -5,6 +5,30 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.6.10' apply false
 }
 
+subprojects {
+    apply plugin: 'maven-publish'
+
+    afterEvaluate {
+        // To avoid publishing of the applications inside the project ..
+        if (!plugins.hasPlugin("android")) {
+            publishing {
+                publications {
+                    mavenAar(MavenPublication) {
+                        afterEvaluate {
+                            artifactId "$project.name"
+                            from components.release
+                        }
+                    }
+                }
+                repositories {
+                    //My reop details and creddentials
+                }
+            }
+        }
+    }
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
